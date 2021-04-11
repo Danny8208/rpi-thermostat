@@ -1,14 +1,30 @@
 from flask import Flask, render_template, request, jsonify, send_file
 import json
+import time
+import threading
 
 app = Flask(__name__)
 
 temperature_data = {
     "cur_temp": 70,
-    "target_temp": 80,
+    "target_temp": 70, 
     "running": 0,
-    "humidity": 20
+    "humidity": 20,
+    "auto": True
 }
+
+def update():
+    while True:
+        temperature_data["cur_temp"] = 70
+        if temperature_data["target_temp"] > temperature_data["cur_temp"] and temperature_data["auto"]: temperature_data["running"] = 1
+        else: temperature_data["running"] = 0
+        print("updated")
+        time.sleep(1)
+
+def updatePins():
+    while temperature_data["auto"]:
+        print("updated pins")
+        time.sleep(60 * 5)
 
 @app.route('/')
 def index():
@@ -25,9 +41,6 @@ def api():
                     print(temperature_data[temp_key])
         return jsonify(temperature_data)
     else:
-        if temperature_data["target_temp"] > temperature_data["cur_temp"]:
-            temperature_data["running"] = 1
-        else: temperature_data["running"] = 0
         return jsonify(temperature_data)
 
 @app.route('/settings')
@@ -43,4 +56,10 @@ def long_scripts():
     return send_file("templates/long_scripts.js")
 
 if __name__ == '__main__':
+    updateThread = threading.Thread(target=update)
+    updatePinsThread = threading.Thread(target=updatePins)
+    updateThread.start()
+    updatePinsThread.start()
     app.run(host='0.0.0.0')
+    updateThread.join()
+    updatePinsThread.join()
