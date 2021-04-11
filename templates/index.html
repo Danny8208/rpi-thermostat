@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>poo</title>
+        <script src="/long_scripts"></script>
+        <script src="/scripts"></script>
+        <script>
+            $(document).ready(function() {
+                checkAndSetCookies()
+                update()
+                $("#temp_up").click(function() {
+                    setTargetTemp(1)
+                })
+                $("#temp_down").click(function() {
+                    setTargetTemp(-1)
+                })
+                var doc_width = $(document).width()
+                var doc_height = $(document).height()
+                if (doc_width > doc_height) circle_dim = "95vh"
+                else if (doc_height > doc_width) circle_dim = "95vw"
+                $("body").css("background-color", Cookies.get("background_color"))
+                $(".main").css({
+                    "display": "flex",
+                    "justify-content": "center",
+                    "touch-action": "manipulation"
+                })
+                $("#circle").css({
+                    "height": circle_dim,
+                    "width": circle_dim,
+                    "border-radius": "50%",
+                    "background-color": "#121212",
+                    "display": "flex",
+                    "justify-content": "center",
+                    "position": "relative"
+                })
+                $("#target_temp").css({
+                    "display": "flex",
+                    "align-self": "center"
+                })
+                $("#cur_temp").css({
+                    "display": "flex",
+                    "position": "absolute",
+                    "top": "5%"
+                })
+                $("#temp_up").css({
+                    "position": "absolute",
+                    "display": "flex",
+                    "left": "50%",
+                    "bottom": 0,
+                    "width": "25%",
+                    "height": "10%"
+                })
+                $("#temp_down").css({
+                    "display": "flex",
+                    "position": "absolute",
+                    "bottom": 0,
+                    "right": "50%",
+                    "width": "25%",
+                    "height": "10%"
+                })
+            })
+            function setTargetTemp(degree) {
+                if (degree == -1) {
+                    $.getJSON("/api", function(json) {
+                        $.post("api", {target_temp: json.target_temp - 1})
+                    })
+                } else {
+                    $.getJSON("/api", function(json) {
+                        $.post("api", {target_temp: Number(json.target_temp) + 1})
+                    })
+                }
+                update()
+            }
+            setInterval(update, 1000)
+            function update() {
+                $.getJSON("/api", function(json) {
+                    if (Cookies.get("temperature_scale") == "celsius") {
+                        $("#target_temp").text(roundToHalf(convertFC(json.target_temp)))
+                        $("#cur_temp").text(roundToHalf(convertFC(json.cur_temp)))
+                    }
+                    else {
+                        $("#target_temp").text(json.target_temp)
+                        $("#cur_temp").text(json.cur_temp)
+                    }
+                    if (json.running == 1) $("#circle").css("background-color", Cookies.get("running_color"))
+                    else $("#circle").css("background-color", Cookies.get("idle_color"))
+                })
+            }
+            </script>
+    </head>
+    <body>
+        <noscript>you dont have javascript enabled, please enable it to render and use the site</noscript>
+        <div class="main">
+            <div id="circle">
+                <div id="cur_temp">loading...</div>
+                <div id="target_temp">loading...</div>
+                <button id="temp_up">up</button>
+                <button id="temp_down">down</button>
+            </div>
+        </div>
+   </body>
+</html>
