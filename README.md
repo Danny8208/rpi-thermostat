@@ -18,9 +18,11 @@ $ indicating that you can be any user on the system
  
     # apt update
     # apt install libgpiod2 python3-pip python3-venv
-    $ pip3 install adafruit-circuitpython-dht
+if you want to seperate global python libraries from the one used in the rpi-thermostat directory, use `source venv/bin/activate` after initallizing the python evironment(run `python3 -v venv venv` after running installing python3-venv)
+
+    $ pip3 install adafruit-circuitpython-dht gpiozero
     $ pip3 install flask
-or run the following which also collects the javascript libraries and installs the python packages using venv: 
+or run the following which just automates all the steps and also collects the javascript libraries: 
 
     $ chmod +x install_dependencies.sh
     # ./install_dependencies.sh

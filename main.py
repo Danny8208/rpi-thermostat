@@ -1,21 +1,35 @@
 from flask import Flask, render_template, request, jsonify, send_file
-import json
+from gpiozero import LED
 import time
 import threading
+import adafruit_dht
+import board
 
 app = Flask(__name__)
+dhtSensor = adafruit_dht.DHT11(board.D18)
+relay = LED(17)
 
 temperature_data = {
     "cur_temp": 70,
     "target_temp": 70, 
     "running": 0,
     "humidity": 20,
-    "auto": True
+    "auto": 1
 }
 
 def update():
     while True:
-        temperature_data["cur_temp"] = 70
+        try:
+            temperature_data["cur_temp"] = dhtSensor.temperature * (9/5) + 32
+            temperature_data["humidity"] = dhtSensor.humidity
+            print("update sensor values")
+        except RuntimeError as error:
+            print(error.args[0])
+            continue
+        except Exception as error:
+            dhtSensor.exit()
+            raise error
+            continue
         if temperature_data["target_temp"] > temperature_data["cur_temp"] and temperature_data["auto"]: temperature_data["running"] = 1
         else: temperature_data["running"] = 0
         print("updated")
@@ -23,6 +37,8 @@ def update():
 
 def updatePins():
     while temperature_data["auto"]:
+        if temperature_data["running"]: relay.on()
+        else: relay.off()
         print("updated pins")
         time.sleep(60 * 5)
 
