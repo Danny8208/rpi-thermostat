@@ -6,7 +6,7 @@ var default_cookie_values = {
 }
 function checkAndSetCookies() {
     for (let key in default_cookie_values) {
-        if (typeof Cookies.get(key) === "undefined") {
+        if (Cookies.get(key) == undefined) {
             Cookies.set(key, default_cookie_values[key], {expires: new Date(3000, 0)})
         }
         if (key == "temperature_scale") $('input[name="temperature_scale"]').val([Cookies.get(key)])

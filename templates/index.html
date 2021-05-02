@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>poo</title>
+        <title>thermostat</title>
         <script src="/long_scripts"></script>
         <script src="/scripts"></script>
         <script>
             $(document).ready(function() {
+                $.post("/api", {api_key: Cookies.get("api_key")}, function(res) {
+                    if (res == "authenticated") $("#api_notification_container").hide()
+                })
                 checkAndSetCookies()
                 update()
                 $("#temp_up").click(function() {
@@ -58,15 +61,21 @@
                     "width": "25%",
                     "height": "10%"
                 })
+                $("#api_notification_container").css({
+                    "display": "flex",
+                    "position": "absolute",
+                    "z-index": 1,
+                    "background-color": "#f00"
+                })
             })
             function setTargetTemp(degree) {
                 if (degree == -1) {
                     $.getJSON("/api", function(json) {
-                        $.post("api", {target_temp: json.target_temp - 1})
+                        $.post("api", {target_temp: json.target_temp - 1, api_key: Cookies.get("api_key")})
                     })
                 } else {
                     $.getJSON("/api", function(json) {
-                        $.post("api", {target_temp: Number(json.target_temp) + 1})
+                        $.post("api", {target_temp: Number(json.target_temp) + 1, api_key: Cookies.get("api_key")})
                     })
                 }
                 update()
@@ -91,6 +100,9 @@
     <body>
         <noscript>you dont have javascript enabled, please enable it to render and use the site</noscript>
         <div class="main">
+            <div id="api_notification_container">
+                <a href="/phone_authentication">please click this to get an api key to use the web interface</a>
+            </div>
             <div id="circle">
                 <div id="cur_temp">loading...</div>
                 <div id="target_temp">loading...</div>
