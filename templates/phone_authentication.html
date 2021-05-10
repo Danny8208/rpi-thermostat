@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>authenication</title>
-        <script src="/long_scripts"></script>
-        <script src="/scripts"></script>
-        <script>
-            $(document).ready(function() {
-                $("#submit_button").click(function() {
-                    $.post("/register_api_key", {"auth_type": "phone_number", "number": $("#phone_number_input").val()}, function(res) {
-                        if (typeof(res) === "object") {
-                            if ("api_key" in res) {
-                                Cookies.set("api_key", res["api_key"])
-                                window.location.href = "/"
-                            }
+
+<head>
+    <title>authenication</title>
+    <script src="/long_scripts"></script>
+    <script src="/scripts"></script>
+    <script>
+        $(document).ready(function () {
+            $("#submit_button").click(function () {
+                $.post("/register_api_key", { "auth_type": "phone_number", "number": $("#phone_number_input").val() }, function (res) {
+                    if (typeof (res) === "object") {
+                        if ("api_key" in res) {
+                            Cookies.set("api_key", res["api_key"])
+                            window.location.href = "/"
                         }
-                        else {
-                            $("body").append("<br>")
-                            $("body").append(res)
-                        }
-                    })
+                    }
+                    else {
+                        $("body").append("<br>")
+                        $("body").append(res)
+                    }
                 })
             })
-        </script>
-    </head>
-    <body>
-        <input type="number" id="phone_number_input" pattern="[0-9]*" placeholder="number" autocomplete="tel-national">
-        <button id="submit_button">submit</button>
-        <br><a href="/address_authentication">if using a phone number doesnt work for whatever reason, go to here to use an address instead</a>
-    </body>
+        })
+    </script>
+</head>
+
+<body>
+    <input type="number" id="phone_number_input" pattern="[0-9]*" placeholder="number" autocomplete="tel-national">
+    <button id="submit_button">submit</button>
+    <br><a href="/address_authentication">if using a phone number doesnt work for whatever reason, go to here to use an
+        address instead</a>
+</body>
+
 </html>

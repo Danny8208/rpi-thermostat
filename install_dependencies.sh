@@ -4,7 +4,7 @@ sudo apt update
 sudo apt install libgpiod2 python3-pip python3-venv -y
 
 python3 -m venv venv
-./venv/bin/pip install adafruit-circuitpython-dht flask gpiozero
+./venv/bin/pip install adafruit-circuitpython-dht flask gpiozero pymongo
 
 curl https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js > templates/long_scripts.js
 curl https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js >> templates/long_scripts.js

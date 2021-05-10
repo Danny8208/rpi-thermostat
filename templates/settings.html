@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>settings</title>
-        <script src="/long_scripts"></script>
-        <script src="/scripts"></script>
-        <script>
-            $(document).ready(function() {
-                checkAndSetCookies()
-                $("#save").click(function() {
-                    for (let key in default_cookie_values) {
-                        if (key == "temperature_scale") Cookies.set(key, $('input[name="temperature_scale"]:checked').val(), {expires: new Date(3000, 0)})
-                        else Cookies.set(key, $("#" + key).val(), {expires: new Date(3000, 0)})
-                    }
-                })
+
+<head>
+    <title>settings</title>
+    <script src="/long_scripts"></script>
+    <script src="/scripts"></script>
+    <script>
+        $(document).ready(function () {
+            checkAndSetCookies()
+            $("#save").click(function () {
+                for (let key in default_cookie_values) {
+                    if (key == "temperature_scale") Cookies.set(key, $('input[name="temperature_scale"]:checked').val(), { expires: new Date(3000, 0) })
+                    else Cookies.set(key, $("#" + key).val(), { expires: new Date(3000, 0) })
+                }
             })
-        </script>
-    </head>
-    <body>
-        background color <input type="color" id="background_color"><br>
-        idle color <input type="color" id="idle_color"><br>
-        running color <input type="color" id="running_color"><br>
-        temperature scale <input type="radio" name="temperature_scale" value="celsius">degrees celsius<input type="radio" name="temperature_scale" value="fahrenheit">degrees fahrenheit<br>
-        <button id="save">save settings</button>
-    </body>
+        })
+    </script>
+</head>
+
+<body>
+    background color <input type="color" id="background_color"><br>
+    idle color <input type="color" id="idle_color"><br>
+    running color <input type="color" id="running_color"><br>
+    temperature scale <input type="radio" name="temperature_scale" value="celsius">degrees celsius<input type="radio"
+        name="temperature_scale" value="fahrenheit">degrees fahrenheit<br>
+    <button id="save">save settings</button>
+</body>
+
 </html>

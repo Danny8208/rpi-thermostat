@@ -32,3 +32,5 @@ if you would like to change where the libraries are downloaded from, edit the li
 materials to build(currently which is testing):
 - any raspberry pi(preferably a pi zero w for small size and wireless capabillities)
 - a dht11 temperature and humitity sensor
+
+if you are using this and the temperature readings dont work, its probably because i bought a half broken sensor to test it with
