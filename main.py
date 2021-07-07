@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file
 from gpiozero import LED
+from hidden_vars import *
 import time
 import threading
 import adafruit_dht
@@ -10,7 +11,7 @@ app = Flask(__name__)
 dhtSensor = adafruit_dht.DHT11(18)
 heating_relay = LED(23)
 cooling_relay = LED(24)
-db_client = pymongo.MongoClient()
+db_client = pymongo.MongoClient(mongo_uri)
 thermostat_database = db_client["rpi_thermostat_db0"]
 api_keys = thermostat_database["api_keys"]
 
@@ -22,15 +23,6 @@ temperature_data = {
     "temp_display_units": 0,
     "humidity": 20,
 }
-
-address = {
-    "street_address": "address",
-    "city": "randolph",
-    "state": "ma",
-    "zip_code": "02368",
-}
-
-phone_numbers = ["1234567890", "0987654321"]
 
 
 def generate_api_key():

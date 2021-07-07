@@ -2,3 +2,5 @@ venv
 long_scripts.js
 *testing*
 .vscode
+__pycache__
+hidden*
